@@ -1,0 +1,34 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# https://www.playframework.com/documentation/latest/ScalaRouting
+# ~~~~
+
+# An example controller showing a sample home page
+#GET     /                           controllers.HomeController.index()
+
+# Map static resources from the /public folder to the /assets URL path
+#GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+
+# create, read, update, delete
+#
+# GET       /employee - get all employees
+# POST      /employee/new - create new employee
+# GET       /employee/{id} - get employee with id
+# PUT       /employee/{id} - update employee with id
+# DELETE    /employee/{id} - delete employee with id
+GET     /employee       controllers.EmployeeController.getAll()
+POST    /employee/new   controllers.EmployeeController.create()
+GET     /employee/:id   controllers.EmployeeController.getById(id: Int)
+PUT     /employee/:id   controllers.EmployeeController.updateById(id: Int)
+DELETE  /employee/:id   controllers.EmployeeController.deleteById(id: Int)
+
+#GET        /company - get all company
+#POST       /company/new - create new company
+#GET        /company/{id} - get company with id
+#PUT        /company/{id} - update company with id
+#DELETE     /company/{id} - delete company with id
+GET     /company        controllers.CompanyController.getAll()
+POST    /company/new    controllers.CompanyController.create()
+GET     /company/:inn    controllers.CompanyController.getByInn(inn: Int)
+PUT     /company/:inn    controllers.CompanyController.updateByInn(inn: Int)
+DELETE  /company/:inn    controllers.CompanyController.deleteByInn(inn: Int)
