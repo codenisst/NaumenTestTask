@@ -11,33 +11,26 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class CompanyController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
 
-  val companyService = new CompanyService
+  private val companyService: CompanyService = new CompanyService
 
-  //complete
   def getAll(): Action[AnyContent] =  Action {
-    Ok(companyService.getAll())
+    Ok(Json.toJson(companyService.getAll()))
   }
 
-  // complete
   def create(): Action[JsValue] = Action(parse.json) { implicit request: Request[JsValue] =>
-    val newCompany = Json.fromJson[Company](request.body).get
-    companyService.create(newCompany)
+    companyService.create(Json.fromJson[Company](request.body).get)
     Ok
   }
 
-  // complete
   def getByInn(inn: Int): Action[AnyContent] = Action {
-    Ok(companyService.getByInn(inn))
+    Ok(Json.toJson(companyService.getByInn(inn)))
   }
 
-  //complete
   def updateByInn(inn: Int): Action[JsValue] = Action(parse.json) { implicit request: Request[JsValue] =>
-    val updCompany = Json.fromJson[Company](request.body).get
-    companyService.updateByInn(inn, updCompany)
+    companyService.updateByInn(inn, Json.fromJson[Company](request.body).get)
     Ok
   }
 
-  //complete
   def deleteByInn(inn: Int): Action[AnyContent] = Action {
     companyService.removeByInn(inn)
     Ok

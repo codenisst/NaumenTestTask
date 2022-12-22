@@ -10,25 +10,23 @@ import play.api.libs.json.{JsValue, Json}
 @Singleton
 class EmployeeController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
 
-  val employeesService = new EmployeeService
+  private val employeesService: EmployeeService = new EmployeeService
 
   def getAll(): Action[AnyContent] = Action {
-      Ok(employeesService.getAll())
+    Ok(Json.toJson(employeesService.getAll()))
   }
 
   def create(): Action[JsValue] = Action(parse.json) { implicit request: Request[JsValue] =>
-    val newEmployee = Json.fromJson[Employee](request.body).get
-    employeesService.create(newEmployee)
+    employeesService.create(Json.fromJson[Employee](request.body).get)
     Ok
   }
 
   def getById(id: Int): Action[AnyContent] = Action {
-    Ok(employeesService.getById(id))
+    Ok(Json.toJson(employeesService.getById(id)))
   }
 
   def updateById(id: Int): Action[JsValue] = Action(parse.json) { implicit request: Request[JsValue] =>
-    val updEmployee = Json.fromJson[Employee](request.body).get
-    employeesService.updateById(id, updEmployee)
+    employeesService.updateById(id, Json.fromJson[Employee](request.body).get)
     Ok
   }
 
