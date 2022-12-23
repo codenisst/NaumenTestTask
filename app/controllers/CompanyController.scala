@@ -1,12 +1,11 @@
 package controllers
 
+import javax.inject.{Inject, Singleton}
 import models.Company
 import services.CompanyService
 import play.api._
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc._
-
-import javax.inject.{Inject, Singleton}
 
 @Singleton
 class CompanyController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
@@ -18,8 +17,7 @@ class CompanyController @Inject()(val controllerComponents: ControllerComponents
   }
 
   def create(): Action[JsValue] = Action(parse.json) { implicit request: Request[JsValue] =>
-    companyService.create(Json.fromJson[Company](request.body).get)
-    Ok
+    Ok(companyService.create(Json.fromJson[Company](request.body).get))
   }
 
   def getByInn(inn: Int): Action[AnyContent] = Action {
@@ -27,12 +25,14 @@ class CompanyController @Inject()(val controllerComponents: ControllerComponents
   }
 
   def updateByInn(inn: Int): Action[JsValue] = Action(parse.json) { implicit request: Request[JsValue] =>
-    companyService.updateByInn(inn, Json.fromJson[Company](request.body).get)
-    Ok
+    Ok(companyService.updateByInn(inn, Json.fromJson[Company](request.body).get))
   }
 
   def deleteByInn(inn: Int): Action[AnyContent] = Action {
-    companyService.removeByInn(inn)
-    Ok
+    Ok(companyService.removeByInn(inn))
+  }
+
+  def deleteAll(): Action[AnyContent] = Action {
+    Ok(companyService.removeAll())
   }
 }

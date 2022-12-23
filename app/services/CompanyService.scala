@@ -10,11 +10,28 @@ class CompanyService (private val companyDao: CompanyDao = new CompanyDao){
 
   def getAll(): List[Company] = companyDao.getAllComp()
 
-  def create(newEntity: Company): Unit = companyDao.writeComp(newEntity)
+  def create(newEntity: Company): String = {
+    if (companyDao.writeComp(newEntity)) "Done!" else "Failed! Maybe this company already exist!"
+  }
 
-  def getByInn(inn: Int): Company = companyDao.getCompByInn(inn)
+  def getByInn(inn: Int): List[Company] = {
+    companyDao.getCompByInn(inn)
+  }
 
-  def updateByInn(inn: Int, updEntity: Company): Unit = companyDao.updateCompByInn(inn, updEntity)
+  def updateByInn(inn: Int, updEntity: Company): String = {
+    if(updEntity.inn == inn) {
+      companyDao.updateCompByInn(inn, updEntity)
+      "Done!"
+    } else {
+      "Failed! This company does not exist or the data entered is incorrect"
+    }
+  }
 
-  def removeByInn(inn: Int): Unit = companyDao.removeCompByInn(inn)
+  def removeByInn(inn: Int): String = {
+    if(companyDao.removeCompByInn(inn)) "Done!" else "Failed! No such company exists!"
+  }
+
+  def removeAll(): String = {
+    if(companyDao.removeAllComp()) "Done!" else "Failed! Companies not exists!"
+  }
 }

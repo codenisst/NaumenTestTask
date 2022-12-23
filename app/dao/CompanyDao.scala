@@ -1,26 +1,78 @@
 package dao
 
 import models.Company
+import models.repositories.CompanyRepo
+import org.sqlite.{SQLiteErrorCode, SQLiteException}
+import slick.jdbc.SQLiteProfile.api._
 
+import scala.concurrent._
+import ExecutionContext.Implicits.global
 import javax.inject.Singleton
+import scala.concurrent.Await
+import scala.concurrent.duration.Duration
 
 @Singleton
 class CompanyDao {
 
-    var company1: Company = new Company(11111111, "ООО Рога и Копыта")
-    var company2: Company = new Company(22222222, "ООО Моя оборона")
-    var company3: Company = new Company(33333333, "ООО Тоже буква")
-    var companyDb: List[Company] = List(company1, company2, company3)
+  private val db = Database.forURL("jdbc:sqlite:database.sqlite")
+  private val companyTable = TableQuery[CompanyRepo]
+  db.run(companyTable.schema.create)
 
   // create, read, update, delete
 
-  def getAllComp(): List[Company] = companyDb
+  def getAllComp(): List[Company] = {
+    var resultList: List[Company] = List()
+    val resultQuery = db.run(companyTable.sortBy(_.name).result)
 
-  def writeComp(newEntity: Company): Unit = companyDb = companyDb.appended(newEntity)
+    Await.ready(resultQuery.map(vector => {
+      resultList = vector.toList
+    }), Duration.Inf)
 
-  def getCompByInn(inn: Int): Company = companyDb.filter(x => x.inn == inn).head
+    resultList
+  }
 
-  def updateCompByInn(inn: Int, updEntity: Company): Unit = companyDb = companyDb.updated(inn, updEntity)
+  def writeComp(newEntity: Company): Boolean = {
+    val query = companyTable += newEntity
+    executionAndChecked(query)
+  }
 
-  def removeCompByInn(inn: Int): Unit = companyDb = companyDb.filter(x => x.inn != inn)
+  def getCompByInn(inn: Int): List[Company] = {
+    var resultList: List[Company] = List()
+    val resultQuery = db.run(companyTable.filter(_.inn === inn).result)
+
+    Await.ready(resultQuery.map(vector => {
+      resultList = vector.toList
+    }), Duration.Inf)
+
+    resultList
+  }
+
+  def updateCompByInn(inn: Int, updEntity: Company): Boolean = {
+    val query = companyTable.filter(_.inn === inn).map(_.name).update(updEntity.name)
+    executionAndChecked(query)
+  }
+
+
+  def removeCompByInn(inn: Int): Boolean = {
+    val query = companyTable.filter(_.inn === inn).delete
+    executionAndChecked(query)
+  }
+
+  def removeAllComp(): Boolean = {
+    val query = companyTable.delete
+    executionAndChecked(query)
+  }
+
+  private def executionAndChecked(query: DBIOAction[Int, NoStream, Effect.Write]): Boolean = {
+    var resultBoolean = true
+
+    try {
+      val tmp = Await.result(db.run(query), Duration.Inf)
+      if (tmp.toString == "0") throw new SQLiteException("", SQLiteErrorCode.SQLITE_ERROR)
+    } catch {
+      case e: SQLiteException => resultBoolean = false
+    }
+
+    resultBoolean
+  }
 }

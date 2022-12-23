@@ -16,9 +16,12 @@ class EmployeeController @Inject()(val controllerComponents: ControllerComponent
     Ok(Json.toJson(employeesService.getAll()))
   }
 
+  def getAllEmpAndComp(): Action[AnyContent] = Action {
+    Ok(Json.toJson(employeesService.getAllEmpAndComp()))
+  }
+
   def create(): Action[JsValue] = Action(parse.json) { implicit request: Request[JsValue] =>
-    employeesService.create(Json.fromJson[Employee](request.body).get)
-    Ok
+    Ok(employeesService.create(Json.fromJson[Employee](request.body).get))
   }
 
   def getById(id: Int): Action[AnyContent] = Action {
@@ -26,12 +29,14 @@ class EmployeeController @Inject()(val controllerComponents: ControllerComponent
   }
 
   def updateById(id: Int): Action[JsValue] = Action(parse.json) { implicit request: Request[JsValue] =>
-    employeesService.updateById(id, Json.fromJson[Employee](request.body).get)
-    Ok
+    Ok(employeesService.updateById(id, Json.fromJson[Employee](request.body).get))
   }
 
   def deleteById(id: Int): Action[AnyContent] = Action {
-    employeesService.removeById(id)
-    Ok
+    Ok(employeesService.removeById(id))
+  }
+
+  def deleteAll(): Action[AnyContent] = Action {
+    Ok(employeesService.removeAll())
   }
 }

@@ -13,3 +13,5 @@ lazy val root = (project in file("."))
   )
 
 libraryDependencies ++=Seq("com.typesafe.play" %% "play" % "2.8.18")
+libraryDependencies += "com.typesafe.slick" %% "slick" % "3.4.1"
+libraryDependencies += "org.xerial" % "sqlite-jdbc" % "3.39.2.1"

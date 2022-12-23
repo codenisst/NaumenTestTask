@@ -16,19 +16,22 @@
 # GET       /employee/{id} - get employee with id
 # PUT       /employee/{id} - update employee with id
 # DELETE    /employee/{id} - delete employee with id
-GET     /employee       controllers.EmployeeController.getAll()
-POST    /employee/new   controllers.EmployeeController.create()
-GET     /employee/:id   controllers.EmployeeController.getById(id: Int)
-PUT     /employee/:id   controllers.EmployeeController.updateById(id: Int)
-DELETE  /employee/:id   controllers.EmployeeController.deleteById(id: Int)
+GET           /employee            controllers.EmployeeController.getAll()
+POST          /employee/new        controllers.EmployeeController.create()
+GET           /employee/:id        controllers.EmployeeController.getById(id: Int)
+PUT           /employee/:id        controllers.EmployeeController.updateById(id: Int)
+DELETE        /employee/:id        controllers.EmployeeController.deleteById(id: Int)
+DELETE        /employee            controllers.EmployeeController.deleteAll()
+GET           /                    controllers.EmployeeController.getAllEmpAndComp()
 
 #GET        /company - get all company
 #POST       /company/new - create new company
 #GET        /company/{id} - get company with id
 #PUT        /company/{id} - update company with id
 #DELETE     /company/{id} - delete company with id
-GET     /company        controllers.CompanyController.getAll()
-POST    /company/new    controllers.CompanyController.create()
-GET     /company/:inn    controllers.CompanyController.getByInn(inn: Int)
-PUT     /company/:inn    controllers.CompanyController.updateByInn(inn: Int)
-DELETE  /company/:inn    controllers.CompanyController.deleteByInn(inn: Int)
+GET           /company             controllers.CompanyController.getAll()
+POST          /company/new         controllers.CompanyController.create()
+GET           /company/:inn        controllers.CompanyController.getByInn(inn: Int)
+PUT           /company/:inn        controllers.CompanyController.updateByInn(inn: Int)
+DELETE        /company/:inn        controllers.CompanyController.deleteByInn(inn: Int)
+DELETE        /company             controllers.CompanyController.deleteAll()
