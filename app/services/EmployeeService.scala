@@ -14,19 +14,17 @@ class EmployeeService(private val employeeDao: EmployeeDao = new EmployeeDao,
 
   def getAllEmpAndComp(): List[Employee] = employeeDao.getAllEmpAndComp()
 
-  def create(newEntity: Employee): String = {
+  def create(newEntity: Employee): Boolean = {
     val foundedCompany = companyDao.getCompByInn(newEntity.company.inn)
     if (foundedCompany.isEmpty) companyDao.writeComp(newEntity.company)
 
     val simplifiedEmployee = SimplifiedEmployee(0, newEntity.company.inn, newEntity.name, newEntity.surname, newEntity.salary)
     employeeDao.writeEmp(simplifiedEmployee)
-    "Done!"
   }
 
   def getById(id: Int): List[SimplifiedEmployee] = employeeDao.getEmpById(id)
 
-  //  def updateById(id: Int, updEntity: Employee): Unit = employeeDao.updateEmpById(id, updEntity)
-  def updateById(id: Int, updEntity: Employee): String = {
+  def updateById(id: Int, updEntity: Employee): Boolean = {
     val foundedCompany = companyDao.getCompByInn(updEntity.company.inn)
     val foundedEmployee = employeeDao.getEmpById(id)
     try {
@@ -34,22 +32,20 @@ class EmployeeService(private val employeeDao: EmployeeDao = new EmployeeDao,
         updEntity.company.inn, updEntity.name, updEntity.surname, updEntity.salary)
       if (employeeDao.updateEmpById(id, simplifiedEmployee)) {
         if (foundedCompany.isEmpty) companyDao.writeComp(updEntity.company)
-        "Done!"
+        true
       } else {
-        "This employee does not exists!"
+        false
       }
     } catch {
-      case e: NoSuchElementException => "This employee does not exists!"
+      case e: NoSuchElementException => false
     }
   }
 
-
-//  def removeById(id: Int): Unit = employeeDao.removeEmpById(id)
-  def removeById(id: Int): String = {
-    if(employeeDao.removeEmpById(id)) "Done!" else "Failed! No such company exists!"
+  def removeById(id: Int): Boolean = {
+    if (employeeDao.removeEmpById(id)) true else false
   }
 
-  def removeAll(): String = {
-    if (employeeDao.removeAllEmp()) "Done!" else "Failed! Companies not exists!"
+  def removeAll(): Boolean = {
+    if (employeeDao.removeAllEmp()) true else false
   }
 }

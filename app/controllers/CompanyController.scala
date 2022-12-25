@@ -1,38 +1,50 @@
 package controllers
 
-import javax.inject.{Inject, Singleton}
 import models.Company
+
+import javax.inject.{Inject, Singleton}
 import services.CompanyService
-import play.api._
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc._
 
 @Singleton
-class CompanyController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
+class CompanyController @Inject()(val controllerComponents: ControllerComponents) extends BaseController with CrudOperations {
 
   private val companyService: CompanyService = new CompanyService
 
-  def getAll(): Action[AnyContent] =  Action {
-    Ok(Json.toJson(companyService.getAll()))
+  override def getAll(): Action[AnyContent] = Action {
+    val resultList = companyService.getAll()
+    if (resultList.nonEmpty) Ok(Json.toJson(resultList)) else NoContent
   }
 
-  def create(): Action[JsValue] = Action(parse.json) { implicit request: Request[JsValue] =>
-    Ok(companyService.create(Json.fromJson[Company](request.body).get))
+  override def create(): Action[JsValue] = Action(parse.json) { implicit request: Request[JsValue] =>
+    try {
+      if (companyService.create(Json.fromJson[Company](request.body).get)) Ok("Done!")
+      else BadRequest("Company already exists")
+    } catch {
+      case e: NoSuchElementException => BadRequest("Invalid request body")
+    }
   }
 
-  def getByInn(inn: Int): Action[AnyContent] = Action {
-    Ok(Json.toJson(companyService.getByInn(inn)))
+  override def getByIdentifier(identifier: Int): Action[AnyContent] = Action {
+    val resultList = companyService.getByInn(identifier)
+    if (resultList.nonEmpty) Ok(Json.toJson(resultList.head)) else NoContent
   }
 
-  def updateByInn(inn: Int): Action[JsValue] = Action(parse.json) { implicit request: Request[JsValue] =>
-    Ok(companyService.updateByInn(inn, Json.fromJson[Company](request.body).get))
+  override def updateByIdentifier(identifier: Int): Action[JsValue] = Action(parse.json) { implicit request: Request[JsValue] =>
+    try {
+      if (companyService.updateByInn(identifier, Json.fromJson[Company](request.body).get)) Ok("Done!")
+      else BadRequest("This company does not exist")
+    } catch {
+      case e: NoSuchElementException => BadRequest("Invalid request body")
+    }
   }
 
-  def deleteByInn(inn: Int): Action[AnyContent] = Action {
-    Ok(companyService.removeByInn(inn))
+  override def deleteByIdentifier(identifier: Int): Action[AnyContent] = Action {
+    if (companyService.removeByInn(identifier)) Ok("Done!") else BadRequest("This company does not exist")
   }
 
-  def deleteAll(): Action[AnyContent] = Action {
-    Ok(companyService.removeAll())
+  override def deleteAll(): Action[AnyContent] = Action {
+    if (companyService.removeAll()) Ok("Done!") else BadRequest("Companies not exists")
   }
 }

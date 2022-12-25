@@ -11,27 +11,38 @@
 
 # create, read, update, delete
 #
-# GET       /employee - get all employees
-# POST      /employee/new - create new employee
-# GET       /employee/{id} - get employee with id
-# PUT       /employee/{id} - update employee with id
-# DELETE    /employee/{id} - delete employee with id
-GET           /employee            controllers.EmployeeController.getAll()
-POST          /employee/new        controllers.EmployeeController.create()
-GET           /employee/:id        controllers.EmployeeController.getById(id: Int)
-PUT           /employee/:id        controllers.EmployeeController.updateById(id: Int)
-DELETE        /employee/:id        controllers.EmployeeController.deleteById(id: Int)
-DELETE        /employee            controllers.EmployeeController.deleteAll()
-GET           /                    controllers.EmployeeController.getAllEmpAndComp()
+# GET       /                   - get all companies and employees sorted by company name
+# GET       /employee           - get all employees
+# GET       /employee/{id}      - get employee with id
+# POST      /employee/new       - create new employee
+# PUT       /employee/{id}      - update employee with id
+# DELETE    /employee           - delete all employee
+# DELETE    /employee/{id}      - delete employee with id
 
-#GET        /company - get all company
-#POST       /company/new - create new company
-#GET        /company/{id} - get company with id
-#PUT        /company/{id} - update company with id
-#DELETE     /company/{id} - delete company with id
-GET           /company             controllers.CompanyController.getAll()
-POST          /company/new         controllers.CompanyController.create()
-GET           /company/:inn        controllers.CompanyController.getByInn(inn: Int)
-PUT           /company/:inn        controllers.CompanyController.updateByInn(inn: Int)
-DELETE        /company/:inn        controllers.CompanyController.deleteByInn(inn: Int)
-DELETE        /company             controllers.CompanyController.deleteAll()
+
+GET           /                            controllers.EmployeeController.getAllEmpAndComp()
+GET           /employee                    controllers.EmployeeController.getAll()
+DELETE        /employee                    controllers.EmployeeController.deleteAll()
+POST          /employee/new                controllers.EmployeeController.create()
+GET           /employee/:identifier        controllers.EmployeeController.getByIdentifier(identifier: Int)
+PUT           /employee/:identifier        controllers.EmployeeController.updateByIdentifier(identifier: Int)
+DELETE        /employee/:identifier        controllers.EmployeeController.deleteByIdentifier(identifier: Int)
+
+#GET        /company            - get all company
+#GET        /company/{id}       - get company with id
+#POST       /company/new        - create new company
+#PUT        /company/{id}       - update company with id
+#DELETE     /company            - delete all company
+#DELETE     /company/{id}       - delete company with id
+
+GET           /company                     controllers.CompanyController.getAll()
+DELETE        /company                     controllers.CompanyController.deleteAll()
+POST          /company/new                 controllers.CompanyController.create()
+GET           /company/:identifier         controllers.CompanyController.getByIdentifier(identifier: Int)
+PUT           /company/:identifier         controllers.CompanyController.updateByIdentifier(identifier: Int)
+DELETE        /company/:identifier         controllers.CompanyController.deleteByIdentifier(identifier: Int)
+
+#GET           /swagger.json                controllers.ApiHelpController.getResources
+GET           /swagger.json                controllers.DocController.getDoc()
+GET           /docs/                       controllers.Assets.at(path="/public/swagger",file="index.html")
+GET           /docs/*file                  controllers.Assets.at(path="/public/swagger",file)

@@ -1,42 +1,54 @@
 package controllers
 
 import javax.inject._
-import play.api._
 import play.api.mvc._
 import services.EmployeeService
 import models.Employee
 import play.api.libs.json.{JsValue, Json}
 
 @Singleton
-class EmployeeController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
+class EmployeeController @Inject()(val controllerComponents: ControllerComponents) extends BaseController with CrudOperations {
 
   private val employeesService: EmployeeService = new EmployeeService
 
-  def getAll(): Action[AnyContent] = Action {
-    Ok(Json.toJson(employeesService.getAll()))
+  override def getAll(): Action[AnyContent] = Action {
+    val resultList = employeesService.getAll()
+    if (resultList.nonEmpty) Ok(Json.toJson(resultList)) else NoContent
   }
 
   def getAllEmpAndComp(): Action[AnyContent] = Action {
-    Ok(Json.toJson(employeesService.getAllEmpAndComp()))
+    val resultList = employeesService.getAllEmpAndComp()
+    if (resultList.nonEmpty) Ok(Json.toJson(resultList)) else NoContent
   }
 
-  def create(): Action[JsValue] = Action(parse.json) { implicit request: Request[JsValue] =>
-    Ok(employeesService.create(Json.fromJson[Employee](request.body).get))
+  override def create(): Action[JsValue] = Action(parse.json) { implicit request: Request[JsValue] =>
+    try {
+      if (employeesService.create(Json.fromJson[Employee](request.body).get)) Ok("Done!")
+      else BadRequest("Employee already exists")
+    } catch {
+      case e: NoSuchElementException => BadRequest("Invalid request body")
+    }
   }
 
-  def getById(id: Int): Action[AnyContent] = Action {
-    Ok(Json.toJson(employeesService.getById(id)))
+  override def getByIdentifier(identifier: Int): Action[AnyContent] = Action {
+    val resultList = employeesService.getById(identifier)
+    if (resultList.nonEmpty) Ok(Json.toJson(resultList.head)) else NoContent
   }
 
-  def updateById(id: Int): Action[JsValue] = Action(parse.json) { implicit request: Request[JsValue] =>
-    Ok(employeesService.updateById(id, Json.fromJson[Employee](request.body).get))
+  override def updateByIdentifier(identifier: Int): Action[JsValue] = Action(parse.json) { implicit request: Request[JsValue] =>
+    try {
+      if (employeesService.updateById(identifier, Json.fromJson[Employee](request.body).get)) Ok("Done!")
+      else BadRequest("This employee does not exists!")
+    } catch {
+      case e: NoSuchElementException => BadRequest("Invalid request body")
+    }
   }
 
-  def deleteById(id: Int): Action[AnyContent] = Action {
-    Ok(employeesService.removeById(id))
+  override def deleteByIdentifier(identifier: Int): Action[AnyContent] = Action {
+    if (employeesService.removeById(identifier)) Ok("Done!") else BadRequest("This employee does not exist")
   }
 
-  def deleteAll(): Action[AnyContent] = Action {
-    Ok(employeesService.removeAll())
+  override def deleteAll(): Action[AnyContent] = Action {
+    if (employeesService.removeAll()) Ok("Done!") else BadRequest("Employees not exists")
   }
 }

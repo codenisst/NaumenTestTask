@@ -6,32 +6,30 @@ import models.Company
 import javax.inject.Singleton
 
 @Singleton
-class CompanyService (private val companyDao: CompanyDao = new CompanyDao){
+class CompanyService(private val companyDao: CompanyDao = new CompanyDao) {
 
   def getAll(): List[Company] = companyDao.getAllComp()
 
-  def create(newEntity: Company): String = {
-    if (companyDao.writeComp(newEntity)) "Done!" else "Failed! Maybe this company already exist!"
+  def create(newEntity: Company): Boolean = {
+    if (companyDao.writeComp(newEntity)) true else false
   }
 
   def getByInn(inn: Int): List[Company] = {
     companyDao.getCompByInn(inn)
   }
 
-  def updateByInn(inn: Int, updEntity: Company): String = {
-    if(updEntity.inn == inn) {
+  def updateByInn(inn: Int, updEntity: Company): Boolean = {
+    if (updEntity.inn == inn) {
       companyDao.updateCompByInn(inn, updEntity)
-      "Done!"
-    } else {
-      "Failed! This company does not exist or the data entered is incorrect"
-    }
+      true
+    } else false
   }
 
-  def removeByInn(inn: Int): String = {
-    if(companyDao.removeCompByInn(inn)) "Done!" else "Failed! No such company exists!"
+  def removeByInn(inn: Int): Boolean = {
+    if (companyDao.removeCompByInn(inn)) true else false
   }
 
-  def removeAll(): String = {
-    if(companyDao.removeAllComp()) "Done!" else "Failed! Companies not exists!"
+  def removeAll(): Boolean = {
+    if (companyDao.removeAllComp()) true else false
   }
 }

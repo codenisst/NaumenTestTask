@@ -1,0 +1,588 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Документация для API к тестовому заданию",
+    "license": {
+      "name": "Лицензия",
+      "url": "http://www.google.com/"
+    },
+    "version": "0.0.1"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:9000/"
+    }
+  ],
+  "tags": [
+    {
+      "name": "CompanyController",
+      "description": "Операции с компаниями"
+    },
+    {
+      "name": "EmployeeController",
+      "description": "Операции с сотрудниками"
+    }
+  ],
+  "paths": {
+    "/company": {
+      "get": {
+        "summary": "Возвращает все существующие компании",
+        "tags": [
+          "CompanyController"
+        ],
+        "operationId": "getAllCompanies",
+        "responses": {
+          "200": {
+            "description": "Компании найдены",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Companies"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Существующих организаций не найдено"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Удаляет все существующие компании",
+        "tags": [
+          "CompanyController"
+        ],
+        "operationId": "deleteAllCompany",
+        "responses": {
+          "200": {
+            "description": "Компании удалены",
+            "content": {
+              "text/plain": {
+                "example": "Done!"
+              }
+            }
+          },
+          "404": {
+            "description": "Компании не найдены",
+            "content": {
+              "text/plain": {
+                "example": "Companies not exists"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/company/new": {
+      "post": {
+        "summary": "Записывает новую компанию",
+        "tags": [
+          "CompanyController"
+        ],
+        "operationId": "createCompany",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Company"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Компания записана",
+            "content": {
+              "text/plain": {
+                "example": "Done!"
+              }
+            }
+          },
+          "404": {
+            "description": "Неверное тело запроса",
+            "content": {
+              "text/plain": {
+                "example": "Invalid request body"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/company/{identifier}": {
+      "get": {
+        "summary": "Возвращает компанию по ее ИНН",
+        "tags": [
+          "CompanyController"
+        ],
+        "operationId": "getCompany",
+        "parameters": [
+          {
+            "name": "identifier",
+            "in": "path",
+            "required": true,
+            "description": "ИНН компании",
+            "schema": {
+              "type": "integer"
+            },
+            "example": 12345678
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Компания найдена",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Company"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Существующих организаций не найдено"
+          }
+        }
+      },
+      "put": {
+        "summary": "Обновляет информацию о компании",
+        "tags": [
+          "CompanyController"
+        ],
+        "operationId": "updateCompany",
+        "parameters": [
+          {
+            "name": "identifier",
+            "in": "path",
+            "required": true,
+            "description": "ИНН компании",
+            "schema": {
+              "type": "integer"
+            },
+            "example": 12345678
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Company"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Информация о компании обновлена",
+            "content": {
+              "text/plain": {
+                "example": "Done!"
+              }
+            }
+          },
+          "404": {
+            "description": "Неверное тело запроса",
+            "content": {
+              "text/plain": {
+                "example": "Invalid request body"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Удаляет компанию по ее ИНН",
+        "tags": [
+          "CompanyController"
+        ],
+        "operationId": "deleteCompany",
+        "parameters": [
+          {
+            "name": "identifier",
+            "in": "path",
+            "required": true,
+            "description": "ИНН компании",
+            "schema": {
+              "type": "integer"
+            },
+            "example": 12345678
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Компания удалена",
+            "content": {
+              "text/plain": {
+                "example": "Done!"
+              }
+            }
+          },
+          "404": {
+            "description": "Компания не найдена",
+            "content": {
+              "text/plain": {
+                "example": "This company does not exist"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/": {
+      "get": {
+        "summary": "Возвращает всех сотрудников и компании. Сортировка по наименованию",
+        "tags": [
+          "EmployeeController"
+        ],
+        "operationId": "getAllEmployeesAndCompanies",
+        "responses": {
+          "200": {
+            "description": "Сотрудники и компании найдены",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Employees"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Существующих сотрудников с местом работы не найдено"
+          }
+        }
+      }
+    },
+    "/employee": {
+      "get": {
+        "summary": "Возвращает всех записанных сотрудников",
+        "tags": [
+          "EmployeeController"
+        ],
+        "operationId": "getAllEmployees",
+        "responses": {
+          "200": {
+            "description": "Сотрудники найдены",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimplifiedEmployees"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Существующих сотрудников не найдено"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Удаляет всех сотрудников",
+        "tags": [
+          "EmployeeController"
+        ],
+        "operationId": "deleteAllEmployees",
+        "responses": {
+          "200": {
+            "description": "Все сотрудники удалены",
+            "content": {
+              "text/plain": {
+                "example": "Done!"
+              }
+            }
+          },
+          "404": {
+            "description": "Сотрудники не найдены",
+            "content": {
+              "text/plain": {
+                "example": "Employees not exists"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/employee/new": {
+      "post": {
+        "summary": "Записывает нового сотрудника",
+        "tags": [
+          "EmployeeController"
+        ],
+        "operationId": "createEmployee",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Employee"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Сотрудник записан",
+            "content": {
+              "text/plain": {
+                "example": "Done!"
+              }
+            }
+          },
+          "404": {
+            "description": "Неверное тело запроса",
+            "content": {
+              "text/plain": {
+                "example": "Invalid request body"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/employee/{identifier}": {
+      "get": {
+        "summary": "Возвращает сотрудника по ID",
+        "tags": [
+          "EmployeeController"
+        ],
+        "operationId": "getEmployee",
+        "parameters": [
+          {
+            "name": "identifier",
+            "in": "path",
+            "required": true,
+            "description": "ID сотрудника",
+            "schema": {
+              "type": "integer"
+            },
+            "example": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Сотрудник найден",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Employee"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Сотрудник не найден"
+          }
+        }
+      },
+      "put": {
+        "summary": "Обновляет информацию о сотруднике",
+        "tags": [
+          "EmployeeController"
+        ],
+        "operationId": "updateEmployee",
+        "parameters": [
+          {
+            "name": "identifier",
+            "in": "path",
+            "required": true,
+            "description": "ID сотрудника",
+            "schema": {
+              "type": "integer"
+            },
+            "example": 1
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Employee"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Информация о сотруднике обновлена",
+            "content": {
+              "text/plain": {
+                "example": "Done!"
+              }
+            }
+          },
+          "404": {
+            "description": "Неверное тело запроса",
+            "content": {
+              "text/plain": {
+                "example": "Invalid request body"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Удаляет сотрудника по его ID",
+        "tags": [
+          "EmployeeController"
+        ],
+        "operationId": "deleteEmployee",
+        "parameters": [
+          {
+            "name": "identifier",
+            "in": "path",
+            "required": true,
+            "description": "ID сотрудника",
+            "schema": {
+              "type": "integer"
+            },
+            "example": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Сотрудник удален",
+            "content": {
+              "text/plain": {
+                "example": "Done!"
+              }
+            }
+          },
+          "404": {
+            "description": "Сотрудник не найден",
+            "content": {
+              "text/plain": {
+                "example": "This employee does not exist"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Company": {
+        "type": "object",
+        "required": [
+          "inn",
+          "name"
+        ],
+        "properties": {
+          "inn": {
+            "type": "integer",
+            "example": 12345678,
+            "description": "ИНН"
+          },
+          "name": {
+            "type": "string",
+            "example": "ООО Рога и копыта",
+            "description": "Название"
+          }
+        }
+      },
+      "Companies": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Company"
+        }
+      },
+      "Employee": {
+        "type": "object",
+        "required": [
+          "company",
+          "name",
+          "surname",
+          "salary"
+        ],
+        "properties": {
+          "company": {
+            "type": "object",
+            "required": [
+              "inn",
+              "name"
+            ],
+            "properties": {
+              "inn": {
+                "type": "integer",
+                "example": 12345678,
+                "description": "ИНН"
+              },
+              "name": {
+                "type": "string",
+                "example": "Рога и копыта",
+                "description": "Название"
+              }
+            },
+            "description": "Место работы"
+          },
+          "name": {
+            "type": "string",
+            "example": "Антон",
+            "description": "Имя"
+          },
+          "surname": {
+            "type": "string",
+            "example": "Антонович",
+            "description": "Фамилия"
+          },
+          "salary": {
+            "type": "integer",
+            "example": 1000,
+            "description": "Зарплата"
+          }
+        }
+      },
+      "Employees": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Employee"
+        }
+      },
+      "SimplifiedEmployee": {
+        "type": "object",
+        "required": [
+          "id",
+          "companyInn",
+          "name",
+          "surname",
+          "salary"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1,
+            "description": "ID"
+          },
+          "companyInn": {
+            "type": "integer",
+            "example": 12345678,
+            "description": "Название"
+          },
+          "name": {
+            "type": "string",
+            "example": "Антон",
+            "description": "Имя"
+          },
+          "surname": {
+            "type": "string",
+            "example": "Антонович",
+            "description": "Фамилия"
+          },
+          "salary": {
+            "type": "integer",
+            "example": 1000,
+            "description": "Зарплата"
+          }
+        }
+      },
+      "SimplifiedEmployees": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/SimplifiedEmployee"
+        }
+      }
+    }
+  }
+}
