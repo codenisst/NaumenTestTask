@@ -23,8 +23,8 @@ class EmployeeController @Inject()(val controllerComponents: ControllerComponent
 
   override def create(): Action[JsValue] = Action(parse.json) { implicit request: Request[JsValue] =>
     try {
-      if (employeesService.create(Json.fromJson[Employee](request.body).get)) Ok("Done!")
-      else BadRequest("Employee already exists")
+      if (employeesService.create(Json.fromJson[Employee](request.body).get)) Created("Done!")
+      else Forbidden("Employee already exists")
     } catch {
       case e: NoSuchElementException => BadRequest("Invalid request body")
     }
@@ -37,18 +37,18 @@ class EmployeeController @Inject()(val controllerComponents: ControllerComponent
 
   override def updateByIdentifier(identifier: Int): Action[JsValue] = Action(parse.json) { implicit request: Request[JsValue] =>
     try {
-      if (employeesService.updateById(identifier, Json.fromJson[Employee](request.body).get)) Ok("Done!")
-      else BadRequest("This employee does not exists!")
+      if (employeesService.updateById(identifier, Json.fromJson[Employee](request.body).get)) Accepted("Done!")
+      else Forbidden("This employee does not exists!")
     } catch {
       case e: NoSuchElementException => BadRequest("Invalid request body")
     }
   }
 
   override def deleteByIdentifier(identifier: Int): Action[AnyContent] = Action {
-    if (employeesService.removeById(identifier)) Ok("Done!") else BadRequest("This employee does not exist")
+    if (employeesService.removeById(identifier)) Accepted("Done!") else Forbidden("This employee does not exist")
   }
 
   override def deleteAll(): Action[AnyContent] = Action {
-    if (employeesService.removeAll()) Ok("Done!") else BadRequest("Employees not exists")
+    if (employeesService.removeAll()) Accepted("Done!") else Forbidden("Employees not exists")
   }
 }

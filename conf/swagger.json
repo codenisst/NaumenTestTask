@@ -26,7 +26,7 @@
   "paths": {
     "/company": {
       "get": {
-        "summary": "Возвращает все существующие компании",
+        "summary": "Получить все существующие",
         "tags": [
           "CompanyController"
         ],
@@ -48,13 +48,13 @@
         }
       },
       "delete": {
-        "summary": "Удаляет все существующие компании",
+        "summary": "Удалить все существующие",
         "tags": [
           "CompanyController"
         ],
         "operationId": "deleteAllCompany",
         "responses": {
-          "200": {
+          "202": {
             "description": "Компании удалены",
             "content": {
               "text/plain": {
@@ -62,7 +62,7 @@
               }
             }
           },
-          "404": {
+          "403": {
             "description": "Компании не найдены",
             "content": {
               "text/plain": {
@@ -75,7 +75,7 @@
     },
     "/company/new": {
       "post": {
-        "summary": "Записывает новую компанию",
+        "summary": "Записать новую",
         "tags": [
           "CompanyController"
         ],
@@ -91,11 +91,19 @@
           }
         },
         "responses": {
-          "200": {
+          "201": {
             "description": "Компания записана",
             "content": {
               "text/plain": {
                 "example": "Done!"
+              }
+            }
+          },
+          "403": {
+            "description": "Компания уже существует",
+            "content": {
+              "text/plain": {
+                "example": "This company does not exist"
               }
             }
           },
@@ -112,7 +120,7 @@
     },
     "/company/{identifier}": {
       "get": {
-        "summary": "Возвращает компанию по ее ИНН",
+        "summary": "Получить компанию по ИНН",
         "tags": [
           "CompanyController"
         ],
@@ -146,7 +154,7 @@
         }
       },
       "put": {
-        "summary": "Обновляет информацию о компании",
+        "summary": "Обновить информацию",
         "tags": [
           "CompanyController"
         ],
@@ -174,11 +182,19 @@
           }
         },
         "responses": {
-          "200": {
+          "202": {
             "description": "Информация о компании обновлена",
             "content": {
               "text/plain": {
                 "example": "Done!"
+              }
+            }
+          },
+          "403": {
+            "description": "Такой компании не существует",
+            "content": {
+              "text/plain": {
+                "example": "This company does not exist"
               }
             }
           },
@@ -193,7 +209,7 @@
         }
       },
       "delete": {
-        "summary": "Удаляет компанию по ее ИНН",
+        "summary": "Удалить компанию по ИНН",
         "tags": [
           "CompanyController"
         ],
@@ -211,7 +227,7 @@
           }
         ],
         "responses": {
-          "200": {
+          "202": {
             "description": "Компания удалена",
             "content": {
               "text/plain": {
@@ -219,7 +235,7 @@
               }
             }
           },
-          "404": {
+          "403": {
             "description": "Компания не найдена",
             "content": {
               "text/plain": {
@@ -232,7 +248,7 @@
     },
     "/": {
       "get": {
-        "summary": "Возвращает всех сотрудников и компании. Сортировка по наименованию",
+        "summary": "Получить всех сотрудников и компании. Сортировка по наименованию компании",
         "tags": [
           "EmployeeController"
         ],
@@ -256,7 +272,7 @@
     },
     "/employee": {
       "get": {
-        "summary": "Возвращает всех записанных сотрудников",
+        "summary": "Получить всех записанных",
         "tags": [
           "EmployeeController"
         ],
@@ -278,13 +294,13 @@
         }
       },
       "delete": {
-        "summary": "Удаляет всех сотрудников",
+        "summary": "Удалить всех",
         "tags": [
           "EmployeeController"
         ],
         "operationId": "deleteAllEmployees",
         "responses": {
-          "200": {
+          "202": {
             "description": "Все сотрудники удалены",
             "content": {
               "text/plain": {
@@ -292,7 +308,7 @@
               }
             }
           },
-          "404": {
+          "403": {
             "description": "Сотрудники не найдены",
             "content": {
               "text/plain": {
@@ -305,7 +321,7 @@
     },
     "/employee/new": {
       "post": {
-        "summary": "Записывает нового сотрудника",
+        "summary": "Записать нового",
         "tags": [
           "EmployeeController"
         ],
@@ -321,11 +337,19 @@
           }
         },
         "responses": {
-          "200": {
+          "201": {
             "description": "Сотрудник записан",
             "content": {
               "text/plain": {
                 "example": "Done!"
+              }
+            }
+          },
+          "403": {
+            "description": "Сотрудник уже записан",
+            "content": {
+              "text/plain": {
+                "example": "Employee already exists"
               }
             }
           },
@@ -342,7 +366,7 @@
     },
     "/employee/{identifier}": {
       "get": {
-        "summary": "Возвращает сотрудника по ID",
+        "summary": "Получить сотрудника по ID",
         "tags": [
           "EmployeeController"
         ],
@@ -376,7 +400,7 @@
         }
       },
       "put": {
-        "summary": "Обновляет информацию о сотруднике",
+        "summary": "Обновить информацию",
         "tags": [
           "EmployeeController"
         ],
@@ -404,11 +428,19 @@
           }
         },
         "responses": {
-          "200": {
+          "202": {
             "description": "Информация о сотруднике обновлена",
             "content": {
               "text/plain": {
                 "example": "Done!"
+              }
+            }
+          },
+          "403": {
+            "description": "Сотрудник не найден",
+            "content": {
+              "text/plain": {
+                "example": "This employee does not exists!"
               }
             }
           },
@@ -423,7 +455,7 @@
         }
       },
       "delete": {
-        "summary": "Удаляет сотрудника по его ID",
+        "summary": "Удалить сотрудника по ID",
         "tags": [
           "EmployeeController"
         ],
@@ -441,7 +473,7 @@
           }
         ],
         "responses": {
-          "200": {
+          "202": {
             "description": "Сотрудник удален",
             "content": {
               "text/plain": {
@@ -449,7 +481,7 @@
               }
             }
           },
-          "404": {
+          "403": {
             "description": "Сотрудник не найден",
             "content": {
               "text/plain": {

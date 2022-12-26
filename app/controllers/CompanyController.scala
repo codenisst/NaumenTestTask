@@ -19,8 +19,8 @@ class CompanyController @Inject()(val controllerComponents: ControllerComponents
 
   override def create(): Action[JsValue] = Action(parse.json) { implicit request: Request[JsValue] =>
     try {
-      if (companyService.create(Json.fromJson[Company](request.body).get)) Ok("Done!")
-      else BadRequest("Company already exists")
+      if (companyService.create(Json.fromJson[Company](request.body).get)) Created("Done!")
+      else Forbidden("Company already exists")
     } catch {
       case e: NoSuchElementException => BadRequest("Invalid request body")
     }
@@ -33,18 +33,18 @@ class CompanyController @Inject()(val controllerComponents: ControllerComponents
 
   override def updateByIdentifier(identifier: Int): Action[JsValue] = Action(parse.json) { implicit request: Request[JsValue] =>
     try {
-      if (companyService.updateByInn(identifier, Json.fromJson[Company](request.body).get)) Ok("Done!")
-      else BadRequest("This company does not exist")
+      if (companyService.updateByInn(identifier, Json.fromJson[Company](request.body).get)) Accepted("Done!")
+      else Forbidden("This company does not exist")
     } catch {
       case e: NoSuchElementException => BadRequest("Invalid request body")
     }
   }
 
   override def deleteByIdentifier(identifier: Int): Action[AnyContent] = Action {
-    if (companyService.removeByInn(identifier)) Ok("Done!") else BadRequest("This company does not exist")
+    if (companyService.removeByInn(identifier)) Accepted("Done!") else Forbidden("This company does not exist")
   }
 
   override def deleteAll(): Action[AnyContent] = Action {
-    if (companyService.removeAll()) Ok("Done!") else BadRequest("Companies not exists")
+    if (companyService.removeAll()) Accepted("Done!") else Forbidden("Companies not exists")
   }
 }
