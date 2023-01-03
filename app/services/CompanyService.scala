@@ -23,7 +23,9 @@ class CompanyService(private val companyDao: CompanyDao = new CompanyDao) {
   def updateByInn(inn: Int, updEntity: Company): Future[Boolean] = {
     if (updEntity.inn == inn) {
       companyDao.updateCompByInn(inn, updEntity)
-    } else Future{false}
+    } else Future {
+      false
+    }
   }
 
   def removeByInn(inn: Int): Future[Boolean] = {

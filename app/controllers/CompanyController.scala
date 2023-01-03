@@ -16,9 +16,7 @@ class CompanyController @Inject()(val controllerComponents: ControllerComponents
 
   override def getAll(): Action[AnyContent] = Action.async {
     val future = companyService.getAll()
-    future.map(resultList => {
-      if (resultList.nonEmpty) Ok(Json.toJson(resultList)) else NoContent
-    })
+    future.map(resultList => if (resultList.nonEmpty) Ok(Json.toJson(resultList)) else NoContent)
   }
 
   override def create(): Action[JsValue] = Action(parse.json).async { implicit request: Request[JsValue] =>
@@ -36,9 +34,7 @@ class CompanyController @Inject()(val controllerComponents: ControllerComponents
 
   override def getByIdentifier(identifier: Int): Action[AnyContent] = Action.async {
     val future = companyService.getByInn(identifier)
-    future.map(resultList => {
-      if (resultList.nonEmpty) Ok(Json.toJson(resultList.head)) else NoContent
-    })
+    future.map(resultList => if (resultList.nonEmpty) Ok(Json.toJson(resultList.head)) else NoContent)
   }
 
   override def updateByIdentifier(identifier: Int): Action[JsValue] = Action(parse.json).async { implicit request: Request[JsValue] =>
