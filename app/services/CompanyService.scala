@@ -4,11 +4,13 @@ import dao.CompanyDao
 import models.Company
 
 import javax.inject.Singleton
+import scala.concurrent.Future
 
 @Singleton
 class CompanyService(private val companyDao: CompanyDao = new CompanyDao) {
 
-  def getAll(): List[Company] = companyDao.getAllComp()
+  //  def getAll(): List[Company] = companyDao.getAllComp()
+  def getAll(): Future[List[Company]] = companyDao.getAllComp()
 
   def create(newEntity: Company): Boolean = {
     if (companyDao.writeComp(newEntity)) true else false

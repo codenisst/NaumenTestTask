@@ -1,30 +1,38 @@
 package controllers
 
 import models.Company
-
-import javax.inject.{Inject, Singleton}
-import services.CompanyService
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc._
+import services.CompanyService
+
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.ExecutionContext.Implicits.global
 
 @Singleton
 class CompanyController @Inject()(val controllerComponents: ControllerComponents) extends BaseController with CrudOperations {
 
   private val companyService: CompanyService = new CompanyService
 
-  override def getAll(): Action[AnyContent] = Action {
-    val resultList = companyService.getAll()
-    if (resultList.nonEmpty) Ok(Json.toJson(resultList)) else NoContent
+  //  override def getAll(): Action[AnyContent] = Action {
+  //    val resultList = companyService.getAll()
+  //    if (resultList.nonEmpty) Ok(Json.toJson(resultList)) else NoContent
+  //  }
+
+  override def getAll(): Action[AnyContent] = Action.async {
+    val future = companyService.getAll()
+    future.map(vector => {
+      if (vector.nonEmpty) Ok(Json.toJson(vector)) else NoContent
+    })
   }
 
-  override def create(): Action[JsValue] = Action(parse.json) { implicit request: Request[JsValue] =>
-    try {
-      if (companyService.create(Json.fromJson[Company](request.body).get)) Created("Done!")
-      else Forbidden("Company already exists")
-    } catch {
-      case e: NoSuchElementException => BadRequest("Invalid request body")
+    override def create(): Action[JsValue] = Action(parse.json) { implicit request: Request[JsValue] =>
+      try {
+        if (companyService.create(Json.fromJson[Company](request.body).get)) Created("Done!")
+        else Forbidden("Company already exists")
+      } catch {
+        case e: NoSuchElementException => BadRequest("Invalid request body")
+      }
     }
-  }
 
   override def getByIdentifier(identifier: Int): Action[AnyContent] = Action {
     val resultList = companyService.getByInn(identifier)

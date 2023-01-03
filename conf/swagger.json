@@ -103,7 +103,7 @@
             "description": "Компания уже существует",
             "content": {
               "text/plain": {
-                "example": "This company does not exist"
+                "example": "The company already exists"
               }
             }
           },

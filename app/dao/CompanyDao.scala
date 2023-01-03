@@ -18,17 +18,19 @@ class CompanyDao {
   private val companyTable = TableQuery[CompanyRepo]
   db.run(companyTable.schema.create)
 
-  // create, read, update, delete
+  //  def getAllComp(): List[Company] = {
+  //    var resultList: List[Company] = List()
+  //    val resultQuery = db.run(companyTable.sortBy(_.name).result)
+  //
+  //    Await.ready(resultQuery.map(vector => {
+  //      resultList = vector.toList
+  //    }), Duration.Inf)
+  //
+  //    resultList
+  //  }
 
-  def getAllComp(): List[Company] = {
-    var resultList: List[Company] = List()
-    val resultQuery = db.run(companyTable.sortBy(_.name).result)
-
-    Await.ready(resultQuery.map(vector => {
-      resultList = vector.toList
-    }), Duration.Inf)
-
-    resultList
+  def getAllComp(): Future[List[Company]] = {
+    db.run(companyTable.sortBy(_.name).result).map(vector => vector.toList)
   }
 
   def writeComp(newEntity: Company): Boolean = {
