@@ -22,21 +22,17 @@ class EmployeeDao extends GeneralDao {
     db.run(employeeTable.result).map(vector => vector.toList)
   }
 
-  //TODO refactor later because Await is used here
   def getAllEmpAndComp(): Future[List[Employee]] = {
-    Future {
-      val query = employeeTable.join(companyTable).on(_.inn === _.inn).sortBy(_._2.name).result
-      val resultQuery = Await.result(db.run(query), Duration.Inf)
-
+    val query = employeeTable.join(companyTable).on(_.inn === _.inn).sortBy(_._2.name).result
+    db.run(query).map(seqElement => {
       var resultList: List[Employee] = List()
-      resultQuery.sortBy(_._2.name).foreach(t => {
-        val e = t._1
-        val c = t._2
+      seqElement.sortBy(_._2.name).foreach(pair => {
+        val e = pair._1
+        val c = pair._2
         resultList = resultList.::(new Employee(new Company(c.inn, c.name), e.name, e.surname, e.salary))
       })
-
-      resultList.reverse
-    }
+      resultList
+    })
   }
 
   def writeEmp(simplifiedEmployee: SimplifiedEmployee): Future[Boolean] = {

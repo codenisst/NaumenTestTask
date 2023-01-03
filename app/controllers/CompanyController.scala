@@ -26,7 +26,7 @@ class CompanyController @Inject()(val controllerComponents: ControllerComponents
         if (boolean) Created("Done!")
         else Forbidden("Company already exists"))
     } catch {
-      case e: NoSuchElementException => Future {
+      case _: NoSuchElementException => Future {
         BadRequest("Invalid request body")
       }
     }
@@ -44,7 +44,7 @@ class CompanyController @Inject()(val controllerComponents: ControllerComponents
         if (boolean) Accepted("Done!")
         else Forbidden("This company does not exist"))
     } catch {
-      case e: NoSuchElementException => Future {
+      case _: NoSuchElementException => Future {
         BadRequest("Invalid request body")
       }
     }

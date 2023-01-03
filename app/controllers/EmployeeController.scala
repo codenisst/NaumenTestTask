@@ -31,7 +31,7 @@ class EmployeeController @Inject()(val controllerComponents: ControllerComponent
       if (boolean) Created("Done!")
       else Forbidden("Employee already exists"))
     } catch {
-      case e: NoSuchElementException => Future{BadRequest("Invalid request body")}
+      case _: NoSuchElementException => Future{BadRequest("Invalid request body")}
     }
   }
 
@@ -47,7 +47,7 @@ class EmployeeController @Inject()(val controllerComponents: ControllerComponent
         if (boolean) Accepted("Done!")
         else Forbidden("This employee does not exists!"))
     } catch {
-      case e: NoSuchElementException => Future{BadRequest("Invalid request body")}
+      case _: NoSuchElementException => Future{BadRequest("Invalid request body")}
     }
   }
 
