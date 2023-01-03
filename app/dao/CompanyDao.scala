@@ -18,63 +18,47 @@ class CompanyDao {
   private val companyTable = TableQuery[CompanyRepo]
   db.run(companyTable.schema.create)
 
-  //  def getAllComp(): List[Company] = {
-  //    var resultList: List[Company] = List()
-  //    val resultQuery = db.run(companyTable.sortBy(_.name).result)
-  //
-  //    Await.ready(resultQuery.map(vector => {
-  //      resultList = vector.toList
-  //    }), Duration.Inf)
-  //
-  //    resultList
-  //  }
-
   def getAllComp(): Future[List[Company]] = {
     db.run(companyTable.sortBy(_.name).result).map(vector => vector.toList)
   }
 
-  def writeComp(newEntity: Company): Boolean = {
+  def writeComp(newEntity: Company): Future[Boolean] = {
     val query = companyTable += newEntity
     executionAndChecked(query)
   }
 
-  def getCompByInn(inn: Int): List[Company] = {
-    var resultList: List[Company] = List()
-    val resultQuery = db.run(companyTable.filter(_.inn === inn).result)
-
-    Await.ready(resultQuery.map(vector => {
-      resultList = vector.toList
-    }), Duration.Inf)
-
-    resultList
+  def getCompByInn(inn: Int): Future[List[Company]] = {
+    db.run(companyTable.filter(_.inn === inn).result).map(vector => vector.toList)
   }
 
-  def updateCompByInn(inn: Int, updEntity: Company): Boolean = {
+  def updateCompByInn(inn: Int, updEntity: Company): Future[Boolean] = {
     val query = companyTable.filter(_.inn === inn).map(_.name).update(updEntity.name)
     executionAndChecked(query)
   }
 
 
-  def removeCompByInn(inn: Int): Boolean = {
+  def removeCompByInn(inn: Int): Future[Boolean] = {
     val query = companyTable.filter(_.inn === inn).delete
     executionAndChecked(query)
   }
 
-  def removeAllComp(): Boolean = {
+  def removeAllComp(): Future[Boolean] = {
     val query = companyTable.delete
     executionAndChecked(query)
   }
 
-  private def executionAndChecked(query: DBIOAction[Int, NoStream, Effect.Write]): Boolean = {
-    var resultBoolean = true
+  private def executionAndChecked(query: DBIOAction[Int, NoStream, Effect.Write]): Future[Boolean] = {
+    Future {
+      var resultBoolean = true
 
-    try {
-      val tmp = Await.result(db.run(query), Duration.Inf)
-      if (tmp.toString == "0") throw new SQLiteException("", SQLiteErrorCode.SQLITE_ERROR)
-    } catch {
-      case e: SQLiteException => resultBoolean = false
+      try {
+        val tmp = Await.result(db.run(query), Duration.Inf)
+        if (tmp.toString == "0") throw new SQLiteException("", SQLiteErrorCode.SQLITE_ERROR)
+      } catch {
+        case e: SQLiteException => resultBoolean = false
+      }
+
+      resultBoolean
     }
-
-    resultBoolean
   }
 }

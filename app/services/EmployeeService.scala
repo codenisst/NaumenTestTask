@@ -15,8 +15,8 @@ class EmployeeService(private val employeeDao: EmployeeDao = new EmployeeDao,
   def getAllEmpAndComp(): List[Employee] = employeeDao.getAllEmpAndComp()
 
   def create(newEntity: Employee): Boolean = {
-    val foundedCompany = companyDao.getCompByInn(newEntity.company.inn)
-    if (foundedCompany.isEmpty) companyDao.writeComp(newEntity.company)
+//    val foundedCompany = companyDao.getCompByInn(newEntity.company.inn)
+//    if (foundedCompany.isEmpty) companyDao.writeComp(newEntity.company)
 
     val simplifiedEmployee = SimplifiedEmployee(0, newEntity.company.inn, newEntity.name, newEntity.surname, newEntity.salary)
     employeeDao.writeEmp(simplifiedEmployee)
@@ -25,13 +25,13 @@ class EmployeeService(private val employeeDao: EmployeeDao = new EmployeeDao,
   def getById(id: Int): List[SimplifiedEmployee] = employeeDao.getEmpById(id)
 
   def updateById(id: Int, updEntity: Employee): Boolean = {
-    val foundedCompany = companyDao.getCompByInn(updEntity.company.inn)
+//    val foundedCompany = companyDao.getCompByInn(updEntity.company.inn)
     val foundedEmployee = employeeDao.getEmpById(id)
     try {
       val simplifiedEmployee = SimplifiedEmployee(foundedEmployee.head.id,
         updEntity.company.inn, updEntity.name, updEntity.surname, updEntity.salary)
       if (employeeDao.updateEmpById(id, simplifiedEmployee)) {
-        if (foundedCompany.isEmpty) companyDao.writeComp(updEntity.company)
+//        if (foundedCompany.isEmpty) companyDao.writeComp(updEntity.company)
         true
       } else {
         false

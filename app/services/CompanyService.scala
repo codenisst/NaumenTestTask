@@ -4,34 +4,33 @@ import dao.CompanyDao
 import models.Company
 
 import javax.inject.Singleton
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
 class CompanyService(private val companyDao: CompanyDao = new CompanyDao) {
 
-  //  def getAll(): List[Company] = companyDao.getAllComp()
   def getAll(): Future[List[Company]] = companyDao.getAllComp()
 
-  def create(newEntity: Company): Boolean = {
-    if (companyDao.writeComp(newEntity)) true else false
+  def create(newEntity: Company): Future[Boolean] = {
+    companyDao.writeComp(newEntity)
   }
 
-  def getByInn(inn: Int): List[Company] = {
+  def getByInn(inn: Int): Future[List[Company]] = {
     companyDao.getCompByInn(inn)
   }
 
-  def updateByInn(inn: Int, updEntity: Company): Boolean = {
+  def updateByInn(inn: Int, updEntity: Company): Future[Boolean] = {
     if (updEntity.inn == inn) {
       companyDao.updateCompByInn(inn, updEntity)
-      true
-    } else false
+    } else Future{false}
   }
 
-  def removeByInn(inn: Int): Boolean = {
-    if (companyDao.removeCompByInn(inn)) true else false
+  def removeByInn(inn: Int): Future[Boolean] = {
+    companyDao.removeCompByInn(inn)
   }
 
-  def removeAll(): Boolean = {
-    if (companyDao.removeAllComp()) true else false
+  def removeAll(): Future[Boolean] = {
+    companyDao.removeAllComp()
   }
 }
