@@ -8,8 +8,6 @@ import slick.lifted.TableQuery
 import scala.concurrent._
 import ExecutionContext.Implicits.global
 import javax.inject.Singleton
-import scala.concurrent.Await
-import scala.concurrent.duration.Duration
 
 @Singleton
 class EmployeeDao extends GeneralDao {

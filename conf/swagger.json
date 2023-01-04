@@ -134,7 +134,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 12345678
+            "example": 1234567890
           }
         ],
         "responses": {
@@ -168,7 +168,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 12345678
+            "example": 1234567890
           }
         ],
         "requestBody": {
@@ -223,7 +223,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 12345678
+            "example": 1234567890
           }
         ],
         "responses": {
@@ -504,7 +504,7 @@
         "properties": {
           "inn": {
             "type": "integer",
-            "example": 12345678,
+            "example": 1234567890,
             "description": "ИНН"
           },
           "name": {
@@ -538,7 +538,7 @@
             "properties": {
               "inn": {
                 "type": "integer",
-                "example": 12345678,
+                "example": 1234567890,
                 "description": "ИНН"
               },
               "name": {
@@ -589,7 +589,7 @@
           },
           "companyInn": {
             "type": "integer",
-            "example": 12345678,
+            "example": 1234567890,
             "description": "Название"
           },
           "name": {
