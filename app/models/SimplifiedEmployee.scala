@@ -2,7 +2,7 @@ package models
 
 import play.api.libs.json.{Json, Reads, Writes}
 
-case class SimplifiedEmployee(id: Int, companyInn: Int, name: String, surname: String, salary: Int) extends Serializable {
+case class SimplifiedEmployee(id: Int, companyInn: Long, name: String, surname: String, salary: Int) extends Serializable {
 
 }
 

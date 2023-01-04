@@ -5,7 +5,7 @@ import slick.jdbc.SQLiteProfile.api._
 import slick.lifted.Tag
 
 class CompanyRepo(tag: Tag) extends Table[Company](tag, "Companies") {
-  def inn: Rep[Int] = column[Int]("Inn", O.PrimaryKey)
+  def inn: Rep[Long] = column[Long]("Inn", O.PrimaryKey)
 
   def name: Rep[String] = column[String]("Name")
 

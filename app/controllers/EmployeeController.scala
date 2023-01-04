@@ -35,14 +35,14 @@ class EmployeeController @Inject()(val controllerComponents: ControllerComponent
     }
   }
 
-  override def getByIdentifier(identifier: Int): Action[AnyContent] = Action.async {
-    val future = employeesService.getById(identifier)
+  override def getByIdentifier(identifier: Long): Action[AnyContent] = Action.async {
+    val future = employeesService.getById(identifier.toInt)
     future.map(resultList => if (resultList.nonEmpty) Ok(Json.toJson(resultList.head)) else NoContent)
   }
 
-  override def updateByIdentifier(identifier: Int): Action[JsValue] = Action(parse.json).async { implicit request: Request[JsValue] =>
+  override def updateByIdentifier(identifier: Long): Action[JsValue] = Action(parse.json).async { implicit request: Request[JsValue] =>
     try {
-      val future = employeesService.updateById(identifier, Json.fromJson[Employee](request.body).get)
+      val future = employeesService.updateById(identifier.toInt, Json.fromJson[Employee](request.body).get)
       future.map(boolean =>
         if (boolean) Accepted("Done!")
         else Forbidden("This employee does not exists!"))
@@ -51,8 +51,8 @@ class EmployeeController @Inject()(val controllerComponents: ControllerComponent
     }
   }
 
-  override def deleteByIdentifier(identifier: Int): Action[AnyContent] = Action.async {
-    val future = employeesService.removeById(identifier)
+  override def deleteByIdentifier(identifier: Long): Action[AnyContent] = Action.async {
+    val future = employeesService.removeById(identifier.toInt)
     future.map(boolean =>
       if (boolean) Accepted("Done!")
       else Forbidden("This employee does not exist"))

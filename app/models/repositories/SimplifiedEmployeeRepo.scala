@@ -9,7 +9,7 @@ class SimplifiedEmployeeRepo(tag: Tag) extends Table[SimplifiedEmployee](tag, "E
 
   def id: Rep[Int] = column[Int]("Id", O.PrimaryKey, O.AutoInc)
 
-  def inn: Rep[Int] = column[Int]("CompanyInnFK")
+  def inn: Rep[Long] = column[Long]("CompanyInnFK")
 
   def name: Rep[String] = column[String]("Name")
 

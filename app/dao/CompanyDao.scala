@@ -21,17 +21,17 @@ class CompanyDao extends GeneralDao {
     executionAndChecked(query)
   }
 
-  def getCompByInn(inn: Int): Future[List[Company]] = {
+  def getCompByInn(inn: Long): Future[List[Company]] = {
     db.run(companyTable.filter(_.inn === inn).result).map(vector => vector.toList)
   }
 
-  def updateCompByInn(inn: Int, updEntity: Company): Future[Boolean] = {
+  def updateCompByInn(inn: Long, updEntity: Company): Future[Boolean] = {
     val query = companyTable.filter(_.inn === inn).map(_.name).update(updEntity.name)
     executionAndChecked(query)
   }
 
 
-  def removeCompByInn(inn: Int): Future[Boolean] = {
+  def removeCompByInn(inn: Long): Future[Boolean] = {
     val query = companyTable.filter(_.inn === inn).delete
     executionAndChecked(query)
   }

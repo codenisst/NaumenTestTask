@@ -16,11 +16,11 @@ class CompanyService(private val companyDao: CompanyDao = new CompanyDao) {
     companyDao.writeComp(newEntity)
   }
 
-  def getByInn(inn: Int): Future[List[Company]] = {
+  def getByInn(inn: Long): Future[List[Company]] = {
     companyDao.getCompByInn(inn)
   }
 
-  def updateByInn(inn: Int, updEntity: Company): Future[Boolean] = {
+  def updateByInn(inn: Long, updEntity: Company): Future[Boolean] = {
     if (updEntity.inn == inn) {
       companyDao.updateCompByInn(inn, updEntity)
     } else Future {
@@ -28,7 +28,7 @@ class CompanyService(private val companyDao: CompanyDao = new CompanyDao) {
     }
   }
 
-  def removeByInn(inn: Int): Future[Boolean] = {
+  def removeByInn(inn: Long): Future[Boolean] = {
     companyDao.removeCompByInn(inn)
   }
 

@@ -32,12 +32,12 @@ class CompanyController @Inject()(val controllerComponents: ControllerComponents
     }
   }
 
-  override def getByIdentifier(identifier: Int): Action[AnyContent] = Action.async {
+  override def getByIdentifier(identifier: Long): Action[AnyContent] = Action.async {
     val future = companyService.getByInn(identifier)
     future.map(resultList => if (resultList.nonEmpty) Ok(Json.toJson(resultList.head)) else NoContent)
   }
 
-  override def updateByIdentifier(identifier: Int): Action[JsValue] = Action(parse.json).async { implicit request: Request[JsValue] =>
+  override def updateByIdentifier(identifier: Long): Action[JsValue] = Action(parse.json).async { implicit request: Request[JsValue] =>
     try {
       val future = companyService.updateByInn(identifier, Json.fromJson[Company](request.body).get)
       future.map(boolean =>
@@ -50,7 +50,7 @@ class CompanyController @Inject()(val controllerComponents: ControllerComponents
     }
   }
 
-  override def deleteByIdentifier(identifier: Int): Action[AnyContent] = Action.async {
+  override def deleteByIdentifier(identifier: Long): Action[AnyContent] = Action.async {
     val future = companyService.removeByInn(identifier)
     future.map(boolean =>
       if (boolean) Accepted("Done!")

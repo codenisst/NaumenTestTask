@@ -10,11 +10,11 @@ trait CrudOperations {
 
   def create(): Action[JsValue]
 
-  def getByIdentifier(identifier: Int): Action[AnyContent]
+  def getByIdentifier(identifier: Long): Action[AnyContent]
 
-  def updateByIdentifier(identifier: Int): Action[JsValue]
+  def updateByIdentifier(identifier: Long): Action[JsValue]
 
-  def deleteByIdentifier(identifier: Int): Action[AnyContent]
+  def deleteByIdentifier(identifier: Long): Action[AnyContent]
 
   def deleteAll(): Action[AnyContent]
 }
