@@ -10,8 +10,6 @@ import javax.inject.Singleton
 @Singleton
 class CompanyDao extends GeneralDao {
 
-  db.run(companyTable.schema.create)
-
   def getAllComp(): Future[List[Company]] = {
     db.run(companyTable.sortBy(_.name).result).map(vector => vector.toList)
   }

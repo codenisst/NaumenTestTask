@@ -14,8 +14,6 @@ class EmployeeDao extends GeneralDao {
 
   private val employeeTable = TableQuery[SimplifiedEmployeeRepo]
 
-  db.run(employeeTable.schema.create)
-
   def getAllEmp(): Future[List[SimplifiedEmployee]] = {
     db.run(employeeTable.result).map(vector => vector.toList)
   }
